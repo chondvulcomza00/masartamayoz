@@ -1,0 +1,4 @@
+const storage = firebase.storage();
+storage.ref('videos/course1.mp4').getDownloadURL().then((url) => {
+    document.getElementById('courseVideo').src = url;
+});

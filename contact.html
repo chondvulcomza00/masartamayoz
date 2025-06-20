@@ -1,0 +1,40 @@
+<section class="contact py-5">
+    <div class="container">
+        <h2 class="text-center mb-4">تواصلوا معنا</h2>
+        <form id="contactForm">
+            <div class="mb-3">
+                <label for="name" class="form-label">الاسم</label>
+                <input type="text" class="form-control" id="name" required>
+            </div>
+            <div class="mb-3">
+                <label for="email" class="form-label">البريد الإلكتروني</label>
+                <input type="email" class="form-control" id="email" required>
+            </div>
+            <div class="mb-3">
+                <label for="message" class="form-label">الرسالة</label>
+                <textarea class="form-control" id="message" rows="5" required></textarea>
+            </div>
+            <button type="submit" class="btn btn-primary">إرسال</button>
+        </form>
+    </div>
+</section>
+<script>
+    document.getElementById('contactForm').addEventListener('submit', (e) => {
+        e.preventDefault();
+        const name = document.getElementById('name').value;
+        const email = document.getElementById('email').value;
+        const message = document.getElementById('message').value;
+
+        firebase.firestore().collection('contacts').add({
+            name: name,
+            email: email,
+            message: message,
+            timestamp: firebase.firestore.FieldValue.serverTimestamp()
+        }).then(() => {
+            alert('تم إرسال الرسالة بنجاح!');
+            e.target.reset();
+        }).catch((error) => {
+            alert('خطأ: ' + error.message);
+        });
+    });
+</script>
