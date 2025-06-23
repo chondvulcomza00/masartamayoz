@@ -1,4 +1,3 @@
-<!-- courses.html -->
 <!DOCTYPE html>
 <html lang="ar" dir="rtl">
 <head>
@@ -9,9 +8,52 @@
 </head>
 <body>
   <div class="container mt-5">
-    <h1>الدورات التعليمية</h1>
-    <p>قائمة الدورات ستظهر هنا قريبًا!</p>
-    <a href="index.html" class="btn btn-primary">العودة للرئيسية</a>
+    <h1 class="text-center mb-4">الدورات التعليمية</h1>
+    <div id="coursesList" class="row"></div>
+    <a href="index.html" class="btn btn-primary mt-3">العودة للرئيسية</a>
   </div>
+
+  <script type="module">
+    import { initializeApp } from 'https://www.gstatic.com/firebasejs/9.6.0/firebase-app.js';
+    import { getFirestore, collection, getDocs } from 'https://www.gstatic.com/firebasejs/9.6.0/firebase-firestore.js';
+
+    const firebaseConfig = {
+      apiKey: "AIzaSyD2jKFMjuy462JPxOJ8vOk0DJtmUyAqNvc",
+      authDomain: "masartamayoz-682af.firebaseapp.com",
+      projectId: "masartamayoz-682af",
+      storageBucket: "masartamayoz-682af.appspot.com",
+      messagingSenderId: "527464088229",
+      appId: "1:527464088229:web:2575dd046f6379f8c5034c"
+    };
+
+    const app = initializeApp(firebaseConfig);
+    const db = getFirestore(app);
+
+    async function loadCourses() {
+      const coursesList = document.getElementById('coursesList');
+      const querySnapshot = await getDocs(collection(db, 'courses'));
+      let content = '';
+
+      querySnapshot.forEach((doc) => {
+        const course = doc.data();
+        content += `
+          <div class="col-md-4 mb-4">
+            <div class="card">
+              <img src="https://via.placeholder.com/300x200" class="card-img-top" alt="${course.title}">
+              <div class="card-body">
+                <h5 class="card-title">${course.title}</h5>
+                <p class="card-text">${course.description}</p>
+                <a href="#" class="btn btn-primary">التسجيل</a>
+              </div>
+            </div>
+          </div>
+        `;
+      });
+
+      coursesList.innerHTML = content;
+    }
+
+    window.addEventListener('load', loadCourses);
+  </script>
 </body>
 </html>
